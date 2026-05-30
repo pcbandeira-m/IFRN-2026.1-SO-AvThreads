@@ -1,6 +1,10 @@
 # IFRN-2026.1-SO-Threads
 Segunda atividade avaliativa do primeiro bimestre da disciplina de Sistemas Operacionais do TADS (IFRN/CNAT).
 
+### Apresentação em sala
+
+[Clique aqui e veja a apresentação](https://canva.link/jz17phvj3sditwl)
+
 ## Como Executar a Aplicação
 
 Esta aplicação foi conteinerizada utilizando **Docker** e **Docker Compose**. Isso significa que você não precisa ter o ambiente do Elixir configurado localmente para rodar e testar o código.
