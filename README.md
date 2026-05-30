@@ -1,64 +1,54 @@
-# Atividade 1.2 Avaliativa de 2026.1 - 1o Bimestre - Sistemas operacionais
+# IFRN-2026.1-SO-AvThreads
+Segunda atividade avaliativa do primeiro bimestre da disciplina de Sistemas Operacionais do TADS (IFRN/CNAT).
 
-## Informações gerais
+## Como Executar a Aplicação
 
-- **Público alvo**: alunos da disciplina de **Sistemas operacionais** do curso de [TADS](https://diatinf.ifrn.edu.br/cursos/tecnologia-em-analise-e-desenvolvimento-de-sistemas/) na [DIATINF](https://diatinf.ifrn.edu.br/) no [CNAT-IFRN](https://portal.ifrn.edu.br/campus/natalcentral/)
-- **Professor**: [L A Minora](https://github.com/leonardo-minora/)
-- **Objetivo**:
-  1. Praticar programação de linhas de execução servidor
-  2. Conhecer como linguagens de programação implementam linhas de execução
-- **data de apresentação**: 29/05/2026
+Esta aplicação foi conteinerizada utilizando **Docker** e **Docker Compose**. Isso significa que você não precisa ter o ambiente do Elixir configurado localmente para rodar e testar o código.
 
----
-## Passos da ativadade
-1. Criar um programa servidor e um cliente, sem threads
-2. Testar a comunicação do cliente com o servidor
-3. Criar docker compose com 1 container servidor e 10 containers cliente
-4. Executar o docker compose para verificar o comportamento da comunicação
-5. Criar a segunda versão do servidor com threads
-6. Atualizar o docker compose para o servidor com threads
-7. Executar o docker compose para verificar o comportamento da comunicação
-8. Comparar o comportamento das versões sem e com threads do servidor
+### Pré-requisitos
 
-**Lembre** de anotar suas dificuldades, curiosidades, dúvidas, entre outras coisas e acontecimentos do experimento.
-
----
-## Guia de apresentação
-Sequência de slides
-1. Linguagem e Grupo
-2. Sumário
-3. Bibliotecas usadas
-4. Comparar comportamento com e sem thread
-5. Dificuldades
-6. Demais observações do grupo
+Certifique-se de ter as seguintes ferramentas instaladas no seu sistema:
+* **Docker**
+* **Docker Compose**
 
 ---
 
-## Linguagens e Grupos
-[Informações sobres as linguagenes](/linguagens.md).
+### Nota
 
-## Tutorial Docker Compose (Python Echo)
+O servidor padrão é com thread. Caso queira alterar para o servidor sem thread, altere o arquivo no `Dockerfile`.
 
-- by copilot [Tutorial de cliente/servidor echo com Docker Compose](/docker-compose-echo-python/README.md)
-- [exemplo de sala com servidor e cliente sem threds](/exemplo_sem_thread/)
+---
 
-| Linguagens | Integrantes |
-| ---------- | ----------- |
-| Ada        | ---         |
-| C#         | <ul><li>Andre Luiz</li><li>Elto Bruno</li><li>Henze</li><li>Rubens</li></ul> |
-| C++        | <ul><li>Samuel Chad</li><li>Sarah Beatriz<li>Thiago</li></ul> |
-| Clojure    | ---         |
-| Elixir     | <ul><li>Alisson Bruno</li><li>Patricia Cristina</li><li>Mateus Felipe</li></ul> |
-| Erlang     | ---         |
-| Go         | <ul><li>Aguberto</li><li>Erick</li><li>Patricia Pontes</li></ul> |
-| Haskell    | ---         |
-| Java       | <ul><li>João</li><li>Matues Rocha</li><li>Ryan</li></ul> |
-| Kotlin     | <ul><li>Beatriz</li><li>Bruno</li><li>Camile</li></ul> |
-| Lua        | <ul><li>Gustavo</li><li>Miguel</li><li>Raquel</li><li>Arthur Fontenele</li></ul> |
-| OCaml      | ---         |
-| PHP        | ---         |
-| Rust       | <ul><li>Ane</li><li>Arthur Mariz</li><li>Jennifer</li></ul> |
-| Scala      | ---         |
-| Smalltalk  | ---         |
-| Typescript | <ul><li>Antonio</li><li>Maikon</li><li>Vinicius</li></ul> |
-| Zig        | ---         |
+### Passo a Passo de Execução
+
+**1. Construir as imagens do projeto**
+Abra o seu terminal na raiz do projeto e execute o comando abaixo. O Docker lerá os `Dockerfiles`, fará o download da imagem base do Elixir e empacotará o código:
+```bash
+docker compose build
+```
+
+**2. Iniciar o Servidor**
+Suba o contêiner do servidor em segundo plano (modo *detached*). Isso manterá o servidor rodando e liberará o seu terminal para os próximos comandos:
+```bash
+docker compose up -d servidor
+```
+> **Dica de Monitoramento:** Caso queira visualizar os avisos de conexão do servidor em tempo real, execute `docker compose logs -f servidor`. Para sair da visualização dos logs, pressione `Ctrl+C`.
+
+**3. Iniciar o Cliente e Interagir**
+No mesmo terminal, inicie o cliente em modo interativo. Um prompt de chat será aberto e você poderá enviar mensagens para o servidor:
+```bash
+docker compose run cliente
+```
+
+**4. Testando a Concorrência (Múltiplos Clientes)**
+Para comprovar a eficiência dos micro-processos do Elixir em não bloquear conexões (diferente da versão sequencial), simule acessos simultâneos:
+1. Mantenha o terminal do seu primeiro cliente aberto e conectado.
+2. Abra uma **nova aba ou janela** do seu terminal.
+3. Inicie um segundo cliente executando `docker compose run cliente` novamente.
+4. Envie mensagens de ambas as janelas. Você notará que o servidor atende a ambos concorrentemente, sem travamentos.
+
+**5. Encerrar e Limpar o Ambiente**
+Quando finalizar os seus testes, feche as sessões dos clientes digitando `sair`. Em seguida, para desligar o servidor em segundo plano e remover a rede virtual criada, execute:
+```bash
+docker compose down --remove-orphans
+```
